@@ -2,18 +2,18 @@ const express = require("express");
 const data = require('./data'); 
 // To import diff file in same folder, use ./ notation. If package, just use package name directly
 // ./ means current folder, .. means folder above
+const user = require('./user'); 
+const account = require('./account'); 
 
 //Create server application
 server = express();
 server.use(express.json()); // Tell server to use posted data in JSON format
 
-// Create router object
-router = express.Router();
+server.use(user.router);
+server.use(account.router);
 
-
-// Define mappings
-// Map URI to URL
-
+// Tell server to use created router mapping
+server.use(router);
 
 // GET requests:
 
@@ -30,29 +30,6 @@ router.get("/sum", (request, response) =>{
     response.send("Sum is: " + sum.toFixed(1));
 });
 
-router.get("/user/all", (request, response) => {
-    let users = data.get_all_users(); // get all the users
-    response.send(users);
-});
-
-router.get("/user/by-uid", (request, response) => {
-    let user_id = request.query.user_id;
-    let user = data.get_user_by_user_id(user_id); // get a user based on user_id
-    response.send(user);
-});
-
-router.get("/account/all", (request, response) => {
-    let accounts = data.get_all_accounts(); // get all the accounts
-    response.send(accounts);
-});
-
-router.get("/account/by-aid", (request, response) => {
-    let account_id = request.query.account_id; // get an account based on account_id
-    let account = data.get_account_by_account_id(account_id);
-    response.send(account);
-});
-
-
 
 // POST requests:
 
@@ -68,25 +45,6 @@ router.post("/create", (request, response) =>{
     response.send("Data received.")
 });
 
-router.post("/user/add", (request, response) => {
-    let user = request.body; // Step 1: get user object from request
-    data.add_user(user); // Step 2: add user 
-    response.send("User added succcesfully!"); 
-});
-
-
-router.post("/account/add", (request, response) => {
-    let account = request.body; // Step 1: get account object from request
-    data.add_account(account); // Step 2: add account 
-    response.send("Account added succcesfully!"); 
-});
-
-
-
-
-
-// Tell server to use created router mapping
-server.use(router);
 
 // Start server
 // listen(server no, error) = Start server on port no., throw error message if any
