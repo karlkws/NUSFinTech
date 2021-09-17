@@ -91,7 +91,7 @@ function add_user(user) {
 }
 
 function add_account(account) {
-  users.push(account);
+  accounts.push(account);
 }
 
 module.exports = {

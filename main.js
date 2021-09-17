@@ -7,12 +7,28 @@ const data = require('./data');
 server = express();
 server.use(express.json()); // Tell server to use posted data in JSON format
 
-
 // Create router object
 router = express.Router();
 
+
 // Define mappings
 // Map URI to URL
+
+
+// GET requests:
+
+router.get("/", (request, response) => {
+    // should have standard 2 args: request, response
+    response.send("Welcome to Dev Toolkit #2!");
+}); 
+
+router.get("/sum", (request, response) =>{
+    let x = parseFloat(request.query.x);
+    let y = parseFloat(request.query.y);
+    let sum = x+y;
+
+    response.send("Sum is: " + sum.toFixed(1));
+});
 
 router.get("/user/all", (request, response) => {
     let users = data.get_all_users(); // get all the users
@@ -25,28 +41,21 @@ router.get("/user/by-uid", (request, response) => {
     response.send(user);
 });
 
-router.post("/user/add", (request, response) => {
-    let user = request.body; // Step 1: get user object from request
-    data.add_user(user); // Step 2: add user 
-    response.send("Added succcesfully!"); 
+router.get("/account/all", (request, response) => {
+    let accounts = data.get_all_accounts(); // get all the accounts
+    response.send(accounts);
+});
+
+router.get("/account/by-aid", (request, response) => {
+    let account_id = request.query.account_id; // get an account based on account_id
+    let account = data.get_account_by_account_id(account_id);
+    response.send(account);
 });
 
 
-router.get("/", (request, response) => {
-    // should have standard 2 args: request, response
-    response.send("Welcome to Dev Toolkit #2!");
-});
 
-// GET request
-router.get("/sum", (request, response) =>{
-    let x = parseFloat(request.query.x);
-    let y = parseFloat(request.query.y);
-    let sum = x+y;
+// POST requests:
 
-    response.send("Sum is: " + sum.toFixed(1));
-});
-
-// POST request
 router.post("/create", (request, response) =>{
     let name = request.body.name; // use .body for POST instead of .query, so that input will not appear in the URI/URL, for security purpose
     let phone = request.body.phone;
@@ -58,6 +67,20 @@ router.post("/create", (request, response) =>{
 
     response.send("Data received.")
 });
+
+router.post("/user/add", (request, response) => {
+    let user = request.body; // Step 1: get user object from request
+    data.add_user(user); // Step 2: add user 
+    response.send("User added succcesfully!"); 
+});
+
+
+router.post("/account/add", (request, response) => {
+    let account = request.body; // Step 1: get account object from request
+    data.add_account(account); // Step 2: add account 
+    response.send("Account added succcesfully!"); 
+});
+
 
 
 
