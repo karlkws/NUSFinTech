@@ -1,5 +1,5 @@
 const express = require("express");
-const data = require('./data'); 
+const database = require('./database'); 
 // To import diff file in same folder, use ./ notation. If package, just use package name directly
 // ./ means current folder, .. means folder above
 const user = require('./user'); 
